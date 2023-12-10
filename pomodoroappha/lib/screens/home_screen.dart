@@ -11,10 +11,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const twentyFiveMinutes = 1500;
-  int totalSeconds = 10;
+  int totalSeconds = twentyFiveMinutes;
   int totalPomodoros = 0;
   late Timer timer;
   bool isRunning = false;
+
+  void onResetPressed() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+      totalSeconds = 1500;
+      totalPomodoros = 0;
+    });
+  }
 
   void onTick(Timer timer) {
     if (totalSeconds == 0) {
@@ -76,15 +85,29 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             flex: 3,
             child: Center(
-              child: IconButton(
-                iconSize: 128,
-                color: Theme.of(context).cardColor,
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                icon: Icon(
-                  isRunning
-                      ? Icons.pause_circle_outline_outlined
-                      : Icons.play_circle_outline_outlined,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    iconSize: 128,
+                    color: Theme.of(context).cardColor,
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    icon: Icon(
+                      isRunning
+                          ? Icons.pause_circle_outline_outlined
+                          : Icons.play_circle_outline_outlined,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 68,
+                    color: Theme.of(context).cardColor,
+                    onPressed: onResetPressed,
+                    icon: const Icon(
+                      Icons.loop_outlined,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
